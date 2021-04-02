@@ -37,7 +37,7 @@ let age = document.querySelector('#age').value,
     genderSwitch = document.querySelector('.switcher'),
     gender = '',
     genderIdx = 0,
-    actRate = minActivity;
+    activityRate = minActivity;
 
 let switcherTarget = function(event) {
     if(event.target.innerText == "Мужчина"){
@@ -51,28 +51,30 @@ let switcherTarget = function(event) {
     }
 }
 
-function activityRate(event){
-    let actValue = event.target.control.value;
+function activityChoice(event){
+    let actValue = event.target.control;
+    console.log(actValue);
+    console.log(actValue.value);
     switch(actValue) {
         case 'low': 
-            actRate = lowActivity;
+            activityRate = lowActivity;
             break;
         case 'medium':
-            actRate = medActivity;
+            activityRate = medActivity;
             break;
         case 'high':
-            actRate = highActivity;
+            activityRate = highActivity;
             break;
         case 'max':
-            actRate = maxActivity;
+            activityRate = maxActivity;
             break;
         default:
-            actRate = minActivity;
+            activityRate = minActivity;
     }
 }
 
-console.log(actRate);
-document.addEventListener('click', activityRate);
+console.log(activityRate);
+document.addEventListener('click', activityChoice);
 document.addEventListener('click', switcherTarget);
 
 
