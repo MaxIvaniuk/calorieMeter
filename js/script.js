@@ -25,63 +25,140 @@
 //     Набор веса: прибавляем 15% от нормы к этой норме.
 //     Сброс веса: вычитаем 15% от нормы из этой нормы.
 
-const minActivity = 1.2,
-      lowActivity = 1.375,
-      medActivity = 1.55,
-      highActivity = 1.725,
-      maxActivity = 1.9;
- 
-let age = document.querySelector('#age').value,
-    height = document.querySelector('#height').value,
-    weight = document.querySelector('#weight').value,
-    genderSwitch = document.querySelector('.switcher'),
-    gender = '',
-    genderIdx = 0,
-    activityRate = minActivity;
+// perfectWeight = (10 * weight) + (6.25 * height) - (5 * age) - genderIndex;
+// calorieNorm = perfectWeight * activityRate;
+// weightGain = calorieNorm + (calorieNorm * 15 / 100);
+// weightLoss = calorieNorm - (calorieNorm * 15 / 100);
 
-let switcherTarget = function(event) {
-    if(event.target.innerText == "Мужчина"){
+const activityCoef = {
+    min: 1.2,
+    low: 1.375,
+    med: 1.55,
+    high: 1.725,
+    max: 1.9
+}
+
+const genderSwitch = document.querySelector('.switcher'),
+      humanParameters = document.querySelector('.inputs-group'),
+      radioBtns = document.querySelector('.radios-group'),
+      submitBtn = document.querySelector('.form__submit-button'),
+      resetBtn = document.querySelector('.form__reset-button'),
+      formSubmit = document.querySelector('.form__submit'),
+      form = document.querySelector('#form'),
+      counterResult = document.querySelector('.counter__result');
+ 
+let age = 0,
+    height = 0,
+    weight = 0,
+    gender = '',
+    genderIndex = -5,
+    radioValue = '',
+    activityRate = activityCoef.min,
+    perfectWeight,
+    radioBtnValue = document.querySelector('input[name="activity"]:checked');
+
+// Get users gender and set gender index
+function switcherTarget(event) {
+    if(event.target.htmlFor == "gender-male"){
         gender = 'male';
-        genderIdx = 161;
-        console.log(`gender is ${gender} anf ${genderIdx}`);
-    } else if (event.target.innerText == "Женщина") {
+        genderIndex = -5;
+    } else if (event.target.htmlFor == "gender-female") {
         gender = 'female';
-        genderIdx = -5;
-        console.log(`gender is ${gender} and ${genderIdx}`);
+        genderIndex = 161;
     }
 }
 
-function activityChoice(event){
-    let actValue = event.target.control;
-    console.log(actValue);
-    console.log(actValue.value);
-    switch(actValue) {
-        case 'low': 
-            activityRate = lowActivity;
+genderSwitch.addEventListener('click', switcherTarget);
+
+// Get users parameters
+function personParams(event){
+    let input = event.target;
+    switch(input.id) {
+        case 'age':
+            age = input.value;
             break;
-        case 'medium':
-            activityRate = medActivity;
+        case 'height':
+            height = input.value;
             break;
-        case 'high':
-            activityRate = highActivity;
-            break;
-        case 'max':
-            activityRate = maxActivity;
+        case 'weight':
+            weight = input.value;
             break;
         default:
-            activityRate = minActivity;
+            console.log(`Пожалуйста введите данные`);
     }
 }
 
-console.log(activityRate);
-document.addEventListener('click', activityChoice);
-document.addEventListener('click', switcherTarget);
+humanParameters.addEventListener('change', personParams);
 
+// Get users activity rate 
+function activityChoice(){
+    switch(radioBtnValue.value) {
+        case 'low': 
+            activityRate = activityCoef.low;
+            radioValue = '';
+            break;
+        case 'medium':
+            activityRate = activityCoef.med;
+            radioValue = '';
+            break;
+        case 'high':
+            activityRate = activityCoef.high;
+            radioValue = '';
+            break;
+        case 'max':
+            activityRate = activityCoef.max;
+            radioValue = '';
+            break;
+        default:
+            activityRate = activityCoef.min;
+    }
+    console.log(activityRate);
+}
 
+radioBtns.addEventListener('click', activityChoice);
 
-// if(genderSwitch.innerText == "Мужчина") {
-//     gender = 'male';
-//     console.log(`gender is ${gender}`);
-// } else {
-//     gender = 'female';
-//     console.log(`gender is ${gender}`);
+// Set buttons 'enable'
+function enableBtn(){
+    if(genderIndex != 0 && activityRate != 0 && age != 0 && height != 0 && weight != 0) {
+        submitBtn.removeAttribute('disabled');
+        resetBtn.removeAttribute('disabled');
+        console.log('кнопка активна');
+    } else {
+        submitBtn.setAttribute('disabled', 'disabled');
+        resetBtn.setAttribute('disabled', 'disabled');
+        console.log('кнопка dont активна');
+    }
+};
+
+radioBtns.addEventListener('click', enableBtn);
+humanParameters.addEventListener('keyup', enableBtn);
+
+function resetForm(){
+    submitBtn.setAttribute('disabled', 'disabled');
+    resetBtn.setAttribute('disabled', 'disabled');
+    counterResult.classList.add('counter__result--hidden');
+    // form.reset();
+}
+resetBtn.addEventListener('click', resetForm);
+
+// Form submitting
+function onSubmit(event) {
+    event.preventDefault();
+    let formData = new FormData(form);
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("GET", form.action, true);
+
+    xhr.onload = function(e) {
+        if (xhr.status === 200) {
+            if(submitBtn.hasAttribute('disabled') == false){
+                counterResult.classList.remove('counter__result--hidden');
+            }
+        } else {
+            alert('Something went wrong please try again');
+        }
+    };
+    xhr.send(formData);
+}
+
+form.addEventListener('submit', onSubmit);
