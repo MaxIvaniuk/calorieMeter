@@ -1,85 +1,156 @@
 'use strict'
 
-// Формулы
-// Поддержание веса
-    
-// Для женщин:
-    
-// N = (10 × вес в килограммах) + (6,25 × рост в сантиметрах) − (5 × возраст в годах) − 161
-    
-// Для мужчин:
-    
-// N = (10 × вес в килограммах) + (6,25 × рост в сантиметрах) − (5 × возраст в годах) + 5
-    
-// Полученное значение (N) умножаем на коэффициент активности. Результат и будет нормой калорий для поддержания веса.
-// Коэффициенты активности
-    
-//     Минимальная: 1.2.
-//     Низкая: 1.375.
-//     Средняя: 1.55.
-//     Высокая: 1.725.
-//     Очень высокая: 1.9.
-    
-// Формулы для набора и сброса веса
-    
-//     Набор веса: прибавляем 15% от нормы к этой норме.
-//     Сброс веса: вычитаем 15% от нормы из этой нормы.
+const activityCoef = {
+    min: 1.2,
+    low: 1.375,
+    med: 1.55,
+    high: 1.725,
+    max: 1.9
+}
 
-const minActivity = 1.2,
-      lowActivity = 1.375,
-      medActivity = 1.55,
-      highActivity = 1.725,
-      maxActivity = 1.9;
+const genderSwitch = document.querySelector('.switcher'),
+      humanParameters = document.querySelector('.inputs-group'),
+      radiosContainer = document.querySelector('.radios-group'),
+      submitBtn = document.querySelector('.form__submit-button'),
+      resetBtn = document.querySelector('.form__reset-button'),
+      formSubmit = document.querySelector('.form__submit'),
+      counterResult = document.querySelector('.counter__result');
  
-let age = document.querySelector('#age').value,
-    height = document.querySelector('#height').value,
-    weight = document.querySelector('#weight').value,
-    genderSwitch = document.querySelector('.switcher'),
+let age = 0,
+    height = 0,
+    weight = 0,
     gender = '',
-    genderIdx = 0,
-    actRate = minActivity;
+    genderIndex = -5,
+    radioValue = '',
+    activityRate = activityCoef.min,
+    perfectWeight,
+    radioBtns = document.getElementsByName('activity'),
+    maintainingWeightResult = document.querySelector('#calories-norm'),
+    weightLossResult = document.querySelector('#calories-minimal'),
+    weightGainResult = document.querySelector('#calories-maximal'),
+    maintainingWeight,
+    calorieNorm = 0,
+    weightGain = 0,
+    weightLoss = 0;
 
-let switcherTarget = function(event) {
-    if(event.target.innerText == "Мужчина"){
+// Get users gender and set gender index
+function switcherTarget(event) {
+    if(event.target.htmlFor == "gender-male"){
         gender = 'male';
-        genderIdx = 161;
-        console.log(`gender is ${gender} anf ${genderIdx}`);
-    } else if (event.target.innerText == "Женщина") {
+        genderIndex = -5;
+    } else if (event.target.htmlFor == "gender-female") {
         gender = 'female';
-        genderIdx = -5;
-        console.log(`gender is ${gender} and ${genderIdx}`);
+        genderIndex = 161;
     }
 }
 
-function activityRate(event){
-    let actValue = event.target.control.value;
-    switch(actValue) {
-        case 'low': 
-            actRate = lowActivity;
+genderSwitch.addEventListener('click', switcherTarget);
+
+// Get users parameters
+function personParams(event){
+    let input = event.target;
+    switch(input.id) {
+        case 'age':
+            age = input.value;
             break;
-        case 'medium':
-            actRate = medActivity;
+        case 'height':
+            height = input.value;
             break;
-        case 'high':
-            actRate = highActivity;
-            break;
-        case 'max':
-            actRate = maxActivity;
+        case 'weight':
+            weight = input.value;
             break;
         default:
-            actRate = minActivity;
+            alert(`Пожалуйста введите данные`);
     }
 }
 
-console.log(actRate);
-document.addEventListener('click', activityRate);
-document.addEventListener('click', switcherTarget);
+humanParameters.addEventListener('change', personParams);
 
+// Get users activity rate 
+function activityChoice(){
+    for(let i = 0; i < radioBtns.length; i++){
+        if(radioBtns[i].checked == true){
+            switch(radioBtns[i].value) {
+                case 'low': 
+                    activityRate = activityCoef.low;
+                    radioValue = '';
+                    break;
+                case 'medium':
+                    activityRate = activityCoef.med;
+                    radioValue = '';
+                    break;
+                case 'high':
+                    activityRate = activityCoef.high;
+                    radioValue = '';
+                    break;
+                case 'max':
+                    activityRate = activityCoef.max;
+                    radioValue = '';
+                    break;
+                default:
+                    activityRate = activityCoef.min;
+            }
+        }
+    }
+}
 
+radiosContainer.addEventListener('change', activityChoice);
 
-// if(genderSwitch.innerText == "Мужчина") {
-//     gender = 'male';
-//     console.log(`gender is ${gender}`);
-// } else {
-//     gender = 'female';
-//     console.log(`gender is ${gender}`);
+// Set buttons 'enable'
+function enableBtn(){
+    if(genderIndex != 0 && activityRate != 0 && age != 0 && height != 0 && weight != 0) {
+        submitBtn.removeAttribute('disabled');
+        resetBtn.removeAttribute('disabled');
+    } else {
+        submitBtn.setAttribute('disabled', 'disabled');
+        resetBtn.setAttribute('disabled', 'disabled');
+    }
+}
+
+radiosContainer.addEventListener('change', enableBtn);
+humanParameters.addEventListener('keyup', enableBtn);
+
+// Form resetting
+function resetForm(event){
+    event.target.parentElement.form.reset();
+    submitBtn.setAttribute('disabled', 'disabled');
+    resetBtn.setAttribute('disabled', 'disabled');
+    counterResult.classList.add('counter__result--hidden');
+}
+
+resetBtn.addEventListener('click', resetForm);
+
+// Calculate and show results
+function calculateResults(){
+    maintainingWeight = (10 * weight) + (6.25 * height) - (5 * age) - (genderIndex);
+    calorieNorm = maintainingWeight * activityRate;
+    weightGain = calorieNorm + (calorieNorm * 15 / 100);
+    weightLoss = calorieNorm - (calorieNorm * 15 / 100);
+
+    maintainingWeightResult.textContent = Math.round(calorieNorm);
+    weightLossResult.textContent = Math.round(weightLoss);
+    weightGainResult.textContent = Math.round(weightGain);
+}
+
+// Form submitting
+function onSubmit(event) {
+    event.preventDefault();
+    let formData = new FormData(form);
+    let xhr = new XMLHttpRequest();
+
+    xhr.open("GET", form.action, true);
+
+    xhr.onload = function(e) {
+        if (xhr.status === 200) {
+            if(submitBtn.hasAttribute('disabled') == false){
+                counterResult.classList.remove('counter__result--hidden');
+                calculateResults();
+            }
+        } else {
+            alert('Something went wrong please try again');
+        }
+    };
+    xhr.send(formData);
+}
+
+form.addEventListener('submit', onSubmit);
