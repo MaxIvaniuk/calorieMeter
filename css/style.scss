@@ -20,6 +20,26 @@
         url("../../fonts/pt-sans-caption-regular.woff") format("woff");
 }
 
+// Media Query triggers
+@mixin small {
+    @media only screen and (max-width: 768px) {
+      @content;
+    }
+}
+
+@mixin tablets {
+    @media only screen and (max-width: 481px) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media only screen and (max-width: 320px) {
+        @content;
+    }
+}
+
+// Colors
 $color-gray-darkest: #7b7b7b;
 $color-gray-dark: #7e7e7e;
 $color-gray: #9e9e9e;
@@ -175,6 +195,7 @@ input[type="number"] {
     &__heading {
         margin: 0;
         margin-bottom: 22px;
+        width: 100%;
       
         color: $color-text-white;
         text-align: center;
@@ -201,10 +222,10 @@ input[type="number"] {
         transition: 0.6s ease;
         transition-property: opacity, visibility;
         
-        // &--hidden {
-        //     opacity: 0;
-        //     visibility: hidden;
-        // }
+        &--hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
         & > .heading {
             margin-bottom: 12px;
 
@@ -219,6 +240,17 @@ input[type="number"] {
             text-align: center;
           
             list-style: none;
+
+            @include tablets {
+                flex-direction: column;
+            }
+        }
+
+        &-item {
+            display: flex;
+            flex-direction: row;
+            margin: 10px 0;
+            width: 90%;
         }
 
         & h3 {
@@ -234,6 +266,11 @@ input[type="number"] {
             margin: 0;
 
             color: $color-gray-dark;
+
+            @include tablets {
+                margin-left: 20px;
+                text-transform: uppercase;
+            }
         }
     }
 
@@ -251,6 +288,12 @@ input[type="number"] {
       
         border-radius: 4px;
         list-style: none;
+
+        @include tablets {
+            flex-direction: column;
+            width: 90%;
+            margin: 0 auto;
+        }
 
         &__item {
             flex: 1 1;
@@ -337,9 +380,24 @@ input[type="number"] {
       
         list-style: none;
 
+        @include tablets {
+            flex-direction: column;
+            align-items: center;
+            margin: 0 auto;
+            width: 90%;
+        }
+
         .input {
             width: fit-content;
             width: 160px;
+
+            @include tablets {
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: row;
+                // justify-content: space-between;
+                width: 100%;
+            }
     
             &__heading {
                 display: flex;
@@ -347,9 +405,15 @@ input[type="number"] {
                 justify-content: center;
                 margin: 0 auto;
                 margin-bottom: 12px;
+
+                @include tablets {
+                    flex: 1;
+                    justify-content: start;
+                }
     
                 & label {
                     cursor: pointer;
+                    float: left;
                 }
     
                 &-unit {
@@ -367,6 +431,10 @@ input[type="number"] {
                 display: flex;
                 width: 80px;
                 margin: 0 auto;
+
+                @include tablets{
+                    flex: 1;
+                }
     
                 & input {
                     width: 100%;
@@ -480,7 +548,7 @@ input[type="number"] {
                     clip-path: inset(100%);
 
                     &:checked + label::before {
-                        background-image: url("../img/icon-radio-checked.svg");
+                        background-image: url("../../img/icon-radio-checked.svg");
                     }
                 }
 
@@ -531,6 +599,11 @@ input[type="number"] {
             cursor: not-allowed;
             background-color: $color-gray-lightest;
         }
+
+        @include tablets {
+            width: 90%;
+            margin-bottom: 20px;
+        }
     }
     .form {
         &__item {
@@ -557,6 +630,10 @@ input[type="number"] {
             display: flex;
             align-items: center;
             margin-top: 42px;
+
+            @include tablets {
+                flex-direction: column;
+            }
         }
 
         &__reset-button {

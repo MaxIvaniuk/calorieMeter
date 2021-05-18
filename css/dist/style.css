@@ -142,6 +142,7 @@ input[type=number] {
 .counter__heading {
   margin: 0;
   margin-bottom: 22px;
+  width: 100%;
   color: #ffffff;
   text-align: center;
 }
@@ -161,6 +162,10 @@ input[type=number] {
   transition: 0.6s ease;
   transition-property: opacity, visibility;
 }
+.counter__result--hidden {
+  opacity: 0;
+  visibility: hidden;
+}
 .counter__result > .heading {
   margin-bottom: 12px;
   color: #fd7d36;
@@ -173,6 +178,17 @@ input[type=number] {
   text-align: center;
   list-style: none;
 }
+@media only screen and (max-width: 481px) {
+  .counter__result-list {
+    flex-direction: column;
+  }
+}
+.counter__result-item {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  width: 90%;
+}
 .counter__result h3 {
   margin: 0;
   margin-bottom: 2px;
@@ -183,6 +199,12 @@ input[type=number] {
 .counter__result p {
   margin: 0;
   color: #7e7e7e;
+}
+@media only screen and (max-width: 481px) {
+  .counter__result p {
+    margin-left: 20px;
+    text-transform: uppercase;
+  }
 }
 .counter .switcher {
   display: flex;
@@ -196,6 +218,13 @@ input[type=number] {
   text-align: center;
   border-radius: 4px;
   list-style: none;
+}
+@media only screen and (max-width: 481px) {
+  .counter .switcher {
+    flex-direction: column;
+    width: 90%;
+    margin: 0 auto;
+  }
 }
 .counter .switcher__item {
   flex: 1 1;
@@ -261,9 +290,25 @@ input[type=number] {
   padding: 0;
   list-style: none;
 }
+@media only screen and (max-width: 481px) {
+  .counter .inputs-group {
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    width: 90%;
+  }
+}
 .counter .inputs-group .input {
   width: fit-content;
   width: 160px;
+}
+@media only screen and (max-width: 481px) {
+  .counter .inputs-group .input {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+  }
 }
 .counter .inputs-group .input__heading {
   display: flex;
@@ -272,8 +317,15 @@ input[type=number] {
   margin: 0 auto;
   margin-bottom: 12px;
 }
+@media only screen and (max-width: 481px) {
+  .counter .inputs-group .input__heading {
+    flex: 1;
+    justify-content: start;
+  }
+}
 .counter .inputs-group .input__heading label {
   cursor: pointer;
+  float: left;
 }
 .counter .inputs-group .input__heading-unit {
   margin: 0;
@@ -287,6 +339,11 @@ input[type=number] {
   display: flex;
   width: 80px;
   margin: 0 auto;
+}
+@media only screen and (max-width: 481px) {
+  .counter .inputs-group .input__wrapper {
+    flex: 1;
+  }
 }
 .counter .inputs-group .input__wrapper input {
   width: 100%;
@@ -375,7 +432,7 @@ input[type=number] {
   clip-path: inset(100%);
 }
 .counter .radios-group .radio__wrapper input[type=radio]:checked + label::before {
-  background-image: url("../img/icon-radio-checked.svg");
+  background-image: url("../../img/icon-radio-checked.svg");
 }
 .counter .radios-group .radio__wrapper label:hover,
 .counter .radios-group .radio__wrapper input[type=radio]:checked + label {
@@ -414,6 +471,12 @@ input[type=number] {
   cursor: not-allowed;
   background-color: #dcdcdc;
 }
+@media only screen and (max-width: 481px) {
+  .counter .button {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
 .counter .form__item {
   margin: 0;
   margin-bottom: 40px;
@@ -433,6 +496,11 @@ input[type=number] {
   display: flex;
   align-items: center;
   margin-top: 42px;
+}
+@media only screen and (max-width: 481px) {
+  .counter .form__submit {
+    flex-direction: column;
+  }
 }
 .counter .form__reset-button {
   display: inline-flex;
