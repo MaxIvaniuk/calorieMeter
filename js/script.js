@@ -96,7 +96,7 @@ function activityChoice(){
 
 radiosContainer.addEventListener('change', activityChoice);
 
-// Set buttons 'enable'
+// Set buttons 'enable' appearance
 function enableBtn(){
     if(genderIndex != 0 && activityRate != 0 && age != 0 && height != 0 && weight != 0) {
         submitBtn.removeAttribute('disabled');

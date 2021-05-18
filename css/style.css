@@ -132,7 +132,6 @@ textarea:invalid {
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   margin: 0;
-
   appearance: none;
 }
 
@@ -175,8 +174,6 @@ input[type="number"] {
   width: 100%;
   max-width: 1160px;
   margin: 0 auto;
-  padding-right: 300px;
-  padding-left: 300px;
 }
 
 .container--no-padding {
@@ -206,6 +203,9 @@ input[type="number"] {
 .counter {
   padding-top: 40px;
   padding-bottom: 50px;
+  max-width: fit-content;
+  min-width: 500px;
+  margin: 0 auto;
 }
 
 .counter__heading {
